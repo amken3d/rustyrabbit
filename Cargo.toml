@@ -1,0 +1,17 @@
+[package]
+name = "rustyrabbit"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+slint = "1.7.2"
+opencv =  "0.92.2"
+log = "0.4.22"
+env_logger = "0.11.5"
+anyhow = "1.0.86"
+time = "0.3.36"
+
+[build-dependencies]
+slint-build = "1.7.2"
