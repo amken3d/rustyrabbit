@@ -1,10 +1,11 @@
-import { Button, HorizontalBox, VerticalBox, GridBox } from "std-widgets.slint";
+import { Button, HorizontalBox, VerticalBox, GridBox} from "std-widgets.slint";
 
 export global Callbacks {
     callback x_button_click();
     callback y_button_click();
     callback z_button_click();
 }
+
 export component MainWindow {
     width: 960px;
     height: 600px;
@@ -14,137 +15,131 @@ export component MainWindow {
 
     callback start_calibration();
     pure callback render-image(int) -> image;
-    in-out property <int> frame;
-
+    in-out property<int> frame;
 
     VerticalLayout {
+        HorizontalLayout {
+            Rectangle { background: white; min-width: 16px; min-height: 16px;
+                HorizontalLayout {
+                    alignment: center;
+                    Rectangle {
+                        padding: 3px;
+                        border-color: white;
+                        border-width: 1px;
+                        width: 640px;
+                        height: 480px;
+                        Image {
+                            width: 100%;
+                            height: 100%;
+                            source: render-image(frame);
+                        }
+                    }
+                }
+            }
 
-            HorizontalLayout {
-            Rectangle { background: white; min-width: 16px; min-height: 16px; /* @lsp:ignore-node */
-                    HorizontalLayout {
-                        alignment: center;
-                        Rectangle {
-                            padding: 3px;
-                            border-color: white;
-                            border-width: 1px;
-                            width: 640px;
-                            height: 480px;
-                            Image {
-                                width: 100%;
-                                height: 100%;
-                                source: render-image(frame);
-                            }
+            Rectangle { background: lightsalmon; min-width: 20px;
+                VerticalLayout {
+                    alignment: LayoutAlignment.stretch;
+                    padding: 10px;
+
+                    // Header for Axes Position
+                    HorizontalBox {
+                        max-height: 20px;
+                        spacing: 0px;
+                        padding: 0px;
+                        Text {
+                            text: "Axes Position";
+                            font-size: 20px;
+                            horizontal-alignment: center;
                         }
                     }
 
-            }
-            Rectangle { background: lightsalmon; min-width: 20px;
-                    VerticalLayout {
-                           padding: 10px;
+                    // Grid for Axes Controls
+                    GridBox {
+                        padding: 15px;
+                        spacing: 15px;
+                        max-height: 140px;
 
-                           HorizontalBox {
-                               max-height: 20px;
-                               spacing: 0px;
-                               padding: 0px;
-                               Text {
-                                   text: "Axes Position";
-                                   font-size: 20px;
-                                   horizontal-alignment: center;
-                               }
-                            }
+                        Row {   // Header
+                            Text { text: "Axis"; horizontal-alignment: center; }
+                            Text { text: "Machine Position"; horizontal-alignment: center; }
+                            Text { text: "Work Position"; horizontal-alignment: center; }
+                            Text { text: "Action"; horizontal-alignment: center; }
+                        }
 
+                        Row {  // X Axis Row
+                            Text { text: "X"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Button { height: 40px; width: 40px; text: "X"; clicked => { Callbacks.x_button_click(); } }
+                        }
 
-                           GridBox {
+                        Row {  // Y Axis Row
+                            Text { text: "Y"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Button { height: 40px; width: 40px; text: "Y"; clicked => { Callbacks.y_button_click(); } }
+                        }
 
-                               padding: 15px;
-                               spacing: 15px;
-                               max-height: 140px;
-
-
-                                Row{   // Header
-                                   Text { text: "Axis" ; horizontal-alignment: center;}
-                                   Text { text: "Machine Position"; horizontal-alignment: center;}
-                                   Text { text: "Work Position"; horizontal-alignment: center;}
-                                   Text { text: "Action"; horizontal-alignment: center;}
-                                   }
-                                Row{
-                                   // X axis row
-                                   Text { text: "X"; horizontal-alignment: center; vertical-alignment: center; }
-                                   Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center;}
-                                   Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center;}
-                                   Button { height: 40px; width: 40px;text: "X";
-                                   clicked => { Callbacks.x_button_click();}}
-                                   }
-                                Row{
-                                   // Y axis row
-                                   Text { text: "Y"; horizontal-alignment: center; vertical-alignment: center;}
-                                   Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center;}
-                                   Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center;}
-                                   Button {height: 40px; width: 40px;text: "Y";
-                                   clicked => { Callbacks.y_button_click();}}
-                                       // Define button functionality
-                                       }
-
-                                Row{
-                                   // Z axis row
-                                   Text { text: "Z"; horizontal-alignment: center; vertical-alignment: center; }
-                                   Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center;}
-                                   Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center;}
-                                   Button {height: 40px; width: 40px;text: "Z";
-                                   clicked => { Callbacks.z_button_click();}
-                                       // Define button functionality
-                                       }
-                                   }
-                           }
-
-                           HorizontalBox {
-
-                                spacing: 10px;
-                                padding: 10px;
-                                max-height: 20px;
-                                Text {
-                                     wrap: TextWrap.no-wrap;
-                                     text: "Jog Controls";
-                                     font-size: 20px;
-                                     horizontal-alignment: center;
-                                }
-                           }
-                           GridBox {
-                //                   width: 20px;
-                //                   height: 20px;
-                                   max-height: 200px;
-
-                                  Row{
-                                   Button {visible: false;text: "Button"; }
-                                   Button {text: "Button"; }
-                                   Button {visible: false;text: "Button"; }
-                                   Button {text: "Button";col: 4;rowspan: 1; }
-                                   }
-                                   Row{
-                                   Button {text: "Button"; }
-                                   Button {visible: false;text: "Button"; }
-                                   Button {text: "Button"; }
-                                   }
-                                   Row{
-                                   Button {visible: false;text: "Button"; }
-                                   Button {text: "Button"; }
-                                   Button {visible: false;text: "Button"; }
-                                   Button {text: "Button";col: 4;}
-                                   }
-
-
-                           }
-
-                           HorizontalBox {
-                            height: 60px;
-                                Button {text: "Rapid"; }
-                                Button {text: "Normal"; }
-                                Button {text: "Precise"; }
-                           }
+                        Row {  // Z Axis Row
+                            Text { text: "Z"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Button { height: 40px; width: 40px; text: "Z"; clicked => { Callbacks.z_button_click(); } }
+                        }
                     }
+
+                    // Jog Controls Header
+                    HorizontalBox {
+                        spacing: 10px;
+                        padding: 10px;
+                        max-height: 20px;
+                        Text {
+                            wrap: TextWrap.no-wrap;
+                            text: "Jog Controls";
+                            font-size: 20px;
+                            horizontal-alignment: center;
+                        }
+                    }
+
+                    // Grid for Jog Controls
+                    GridBox {
+                        max-height: 200px;
+
+                        Row {
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; }
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; col: 4; rowspan: 1; }
+                        }
+
+                        Row {
+                            Button { text: "Button"; }
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; }
+                        }
+
+                        Row {
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; }
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; col: 4; }
+                        }
+                    }
+
+                    // Speed Control Buttons
+                    HorizontalBox {
+                        height: 60px;
+                        Button { text: "Rapid"; }
+                        Button { text: "Normal"; }
+                        Button { text: "Precise"; }
+                    }
+                }
             }
         }
-        Rectangle {background: darkgrey; min-width: 20px;max-height: 100px;
+
+        // Log Output Area
+        Rectangle { background: darkgrey; min-width: 20px; max-height: 105px;
             Text {
                 height: 100px;
                 horizontal-alignment: TextHorizontalAlignment.left;
