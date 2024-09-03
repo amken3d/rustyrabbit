@@ -1,14 +1,25 @@
-import { Button, HorizontalBox, VerticalBox, GridBox} from "std-widgets.slint";
+import { Button, HorizontalBox, VerticalBox, GridBox, TabWidget, ComboBox  } from "std-widgets.slint";
 
 export global Callbacks {
     callback x_button_click();
     callback y_button_click();
     callback z_button_click();
+    callback home_click();
+    callback settings_click();
+    callback help_click();
+    callback calibrate_click();
+    callback camera_toggle_click();
 }
 
-export component MainWindow {
-    width: 960px;
-    height: 600px;
+export component MainWindow inherits Window{
+    min-width:  1000px;
+    min-height: 700px;
+    max-width:  2000px;
+    max-height: 1400px;
+    title: "Rabbit Pick & Place V0.1";
+
+
+    //title: "Rabbit Pick and Place"; // Set the application name as window title
 
     property<int> counter: 0;
     property<string> log_output: "";
@@ -16,28 +27,74 @@ export component MainWindow {
     callback start_calibration();
     pure callback render-image(int) -> image;
     in-out property<int> frame;
+    callback x_button_click();
+    callback y_button_click();
+    callback z_button_click();
+    callback home_click();
+    callback settings_click();
+    callback help_click();
+    callback calibrate_click();
+    callback camera_toggle_click();
 
     VerticalLayout {
+        // Navigation Bar
         HorizontalLayout {
-            Rectangle { background: white; min-width: 16px; min-height: 16px;
-                HorizontalLayout {
+            spacing: 10px;
+            padding: 10px;
+
+
+            Button {
+                text: "Home";
+                height: 40px;
+                clicked => { Callbacks.home_click();}
+            }
+            Button {
+                accessible-role: AccessibleRole.none;
+                height: 40px;
+                text: "Settings";
+                clicked => { Callbacks.settings_click();}
+            }
+            Button {
+                text: "Help";
+                height: 40px;
+                clicked => { Callbacks.help_click(); }
+            }
+        }
+
+        // Main Content
+        HorizontalLayout {
+            Rectangle { background: white; min-width: 16px; min-height: 16px;padding: 5px;
+                VerticalLayout {
                     alignment: center;
-                    Rectangle {
-                        padding: 3px;
-                        border-color: white;
-                        border-width: 1px;
-                        width: 640px;
-                        height: 480px;
-                        Image {
-                            width: 100%;
-                            height: 100%;
-                            source: render-image(frame);
+                    width: 100%;
+                    height: 100%;
+                    Rectangle { width: 640px;height: 480px;
+                        Image { padding: 5px;width: 100%; height: 100%; source: render-image(frame);}
+                    }
+                    Rectangle { width: 640px;height: 5px;                    
+                    }
+                    Rectangle { width: 640px;
+                       HorizontalLayout {
+                        ComboBox {
+                            padding-left: 5px;
+                            width: self.preferred-width * 2;
+                            //height: self.preferred-height *2 ;
+                            model: ["Camera 1", "Camera 2", "Camera 3"];
+                            current-value: "Camera 1";
+                        }
+                        
+                        Button { visible: false; text: "Calibrate"; } 
+                        Button { padding: 10px; height: 40px; width: 100px; text: "Turn On/Off"; clicked => { Callbacks.camera_toggle_click(); } }
+                        Button { visible: false; text: "Calibrate"; } 
+                        Button { padding: 10px; height: 40px; width: 100px; text: "Calibrate"; clicked => { Callbacks.calibrate_click(); } }
+                        Button { visible: false; text: "Calibrate"; } 
                         }
                     }
                 }
             }
 
-            Rectangle { background: lightsalmon; min-width: 20px;
+
+            Rectangle { padding: 5px;background: lightsalmon; min-width: 20px;
                 VerticalLayout {
                     alignment: LayoutAlignment.stretch;
                     padding: 10px;
@@ -48,7 +105,7 @@ export component MainWindow {
                         spacing: 0px;
                         padding: 0px;
                         Text {
-                            text: "Axes Position";
+                            text: "Head Position";
                             font-size: 20px;
                             horizontal-alignment: center;
                         }
@@ -58,7 +115,7 @@ export component MainWindow {
                     GridBox {
                         padding: 15px;
                         spacing: 15px;
-                        max-height: 140px;
+                        //max-height: 140px;
 
                         Row {   // Header
                             Text { text: "Axis"; horizontal-alignment: center; }
@@ -139,11 +196,11 @@ export component MainWindow {
         }
 
         // Log Output Area
-        Rectangle { background: darkgrey; min-width: 20px; max-height: 105px;
+        Rectangle { background: darkgrey; min-width: 20px; min-height: 105px;
             Text {
-                height: 100px;
+                vertical-alignment: TextVerticalAlignment.top;
                 horizontal-alignment: TextHorizontalAlignment.left;
-                text: "Placeholder for Logging";
+                text: log_output;
             }
         }
     }

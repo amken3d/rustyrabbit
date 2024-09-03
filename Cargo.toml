@@ -15,3 +15,4 @@ time = "0.3.36"
 
 [build-dependencies]
 slint-build = "1.7.2"
+coop = { git = "https://codeberg.org/flovansl/co_sl" }
