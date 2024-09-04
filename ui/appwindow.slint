@@ -1,207 +1,90 @@
 import { Button, HorizontalBox, VerticalBox, GridBox, TabWidget, ComboBox  } from "std-widgets.slint";
+//import { TabArea } from "../ui/tab.slint";
+////import { CameraViewport } from "camera.slint";
+import { LogView } from "log.slint";
+import { CalibrationViewPort } from "../ui/calibration.slint";
+import { ControlViewPort } from "../ui/control.slint";
 
-export global Callbacks {
-    callback x_button_click();
-    callback y_button_click();
-    callback z_button_click();
-    callback home_click();
-    callback settings_click();
-    callback help_click();
-    callback calibrate_click();
-    callback camera_toggle_click();
-}
 
 export component MainWindow inherits Window{
-    min-width:  1000px;
-    min-height: 700px;
-    max-width:  2000px;
-    max-height: 1400px;
-    title: "Rabbit Pick & Place V0.1";
-
-
-    //title: "Rabbit Pick and Place"; // Set the application name as window title
-
-    property<int> counter: 0;
-    property<string> log_output: "";
-
-    callback start_calibration();
     pure callback render-image(int) -> image;
     in-out property<int> frame;
-    callback x_button_click();
-    callback y_button_click();
-    callback z_button_click();
-    callback home_click();
-    callback settings_click();
-    callback help_click();
-    callback calibrate_click();
-    callback camera_toggle_click();
+
+    width:  1024px;
+    height: 768px;
+//    max-width:  2000px;
+//    max-height: 1400px;
+    title: "Rabbit Pick & Place V0.1";
 
     VerticalLayout {
-        // Navigation Bar
-        HorizontalLayout {
-            spacing: 10px;
-            padding: 10px;
+        
+        Rectangle {
+            height: parent.height *0.9;
+            HorizontalLayout {
+                alignment: stretch;
 
-
-            Button {
-                text: "Home";
-                height: 40px;
-                clicked => { Callbacks.home_click();}
-            }
-            Button {
-                accessible-role: AccessibleRole.none;
-                height: 40px;
-                text: "Settings";
-                clicked => { Callbacks.settings_click();}
-            }
-            Button {
-                text: "Help";
-                height: 40px;
-                clicked => { Callbacks.help_click(); }
-            }
-        }
-
-        // Main Content
-        HorizontalLayout {
-            Rectangle { background: white; min-width: 16px; min-height: 16px;padding: 5px;
-                VerticalLayout {
-                    alignment: center;
-                    width: 100%;
-                    height: 100%;
-                    Rectangle { width: 640px;height: 480px;
-                        Image { padding: 5px;width: 100%; height: 100%; source: render-image(frame);}
-                    }
-                    Rectangle { width: 640px;height: 5px;                    
-                    }
-                    Rectangle { width: 640px;
-                       HorizontalLayout {
-                        ComboBox {
-                            padding-left: 5px;
-                            width: self.preferred-width * 2;
-                            //height: self.preferred-height *2 ;
-                            model: ["Camera 1", "Camera 2", "Camera 3"];
-                            current-value: "Camera 1";
-                        }
-                        
-                        Button { visible: false; text: "Calibrate"; } 
-                        Button { padding: 10px; height: 40px; width: 100px; text: "Turn On/Off"; clicked => { Callbacks.camera_toggle_click(); } }
-                        Button { visible: false; text: "Calibrate"; } 
-                        Button { padding: 10px; height: 40px; width: 100px; text: "Calibrate"; clicked => { Callbacks.calibrate_click(); } }
-                        Button { visible: false; text: "Calibrate"; } 
+                VerticalBox {
+                    width: parent.width *0.35;
+                    //TabArea {}
+                    TabWidget{
+                            Tab {
+                                 title: "Control";
+                                 Rectangle { background: orange; ControlViewPort {}}
+                            }
+                            Tab {
+                                 title: "Calibration";
+                                 Rectangle { background: pink; CalibrationViewPort {}}
+                            }
+//                            Tab {
+//                                 title: "Settings";
+//                                 Rectangle { background: orange; }
+//                            }
+//                            Tab {
+//                                 title: "Components";
+//                                 Rectangle { background: pink; }
+//                            }
+//                            Tab {
+//                                 title: "Jobs";
+//                                 Rectangle { background: pink; }
+//                            }
+//                            Tab {
+//                                 title: "Help";
+//                                 Rectangle { background: pink; }
+//                            }
                         }
                     }
-                }
-            }
-
-
-            Rectangle { padding: 5px;background: lightsalmon; min-width: 20px;
-                VerticalLayout {
-                    alignment: LayoutAlignment.stretch;
-                    padding: 10px;
-
-                    // Header for Axes Position
-                    HorizontalBox {
-                        max-height: 20px;
-                        spacing: 0px;
-                        padding: 0px;
-                        Text {
-                            text: "Head Position";
-                            font-size: 20px;
-                            horizontal-alignment: center;
+                    Rectangle {
+                        width: parent.width *0.65;
+                        //CameraViewport {}
+                            Rectangle { background: lightgrey; min-width: 16px; min-height: 16px;padding: 50px;
+                                VerticalLayout {alignment: end; width: 100%;height: 100%;
+                                    CameraBox := Rectangle { width: 640px;height: 480px;
+                                    Image { padding: 50px;width: 100%; height: 100%; source: render-image(frame);}
+                                    }
+                                    CameraSwitch := Rectangle { width: 640px;
+                                        HorizontalLayout {
+                                            ComboBox {
+                                                padding-left: 5px;
+                                                width: self.preferred-width * 2;
+                                                //height: self.preferred-height *2 ;
+                                                model: ["Camera 1", "Camera 2", "Camera 3"];
+                                                current-value: "Camera 1";
+                                            }
+                                        Button { visible: false; text: "Calibrate"; }
+                                        Button { visible: false; text: "Calibrate"; }
+                                        btnCalibrate := Button { visible: false;padding: 10px; height: 40px; width: 100px; text: "Calibrate";  }
+                                        Button { visible: false; text: "Calibrate"; }
+                                        btnCamPwr := Button { padding: 10px; height: 40px; width: 100px; text: "Turn On/Off";  }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }
-
-                    // Grid for Axes Controls
-                    GridBox {
-                        padding: 15px;
-                        spacing: 15px;
-                        //max-height: 140px;
-
-                        Row {   // Header
-                            Text { text: "Axis"; horizontal-alignment: center; }
-                            Text { text: "Machine Position"; horizontal-alignment: center; }
-                            Text { text: "Work Position"; horizontal-alignment: center; }
-                            Text { text: "Action"; horizontal-alignment: center; }
-                        }
-
-                        Row {  // X Axis Row
-                            Text { text: "X"; horizontal-alignment: center; vertical-alignment: center; }
-                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
-                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
-                            Button { height: 40px; width: 40px; text: "X"; clicked => { Callbacks.x_button_click(); } }
-                        }
-
-                        Row {  // Y Axis Row
-                            Text { text: "Y"; horizontal-alignment: center; vertical-alignment: center; }
-                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
-                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
-                            Button { height: 40px; width: 40px; text: "Y"; clicked => { Callbacks.y_button_click(); } }
-                        }
-
-                        Row {  // Z Axis Row
-                            Text { text: "Z"; horizontal-alignment: center; vertical-alignment: center; }
-                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
-                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
-                            Button { height: 40px; width: 40px; text: "Z"; clicked => { Callbacks.z_button_click(); } }
-                        }
-                    }
-
-                    // Jog Controls Header
-                    HorizontalBox {
-                        spacing: 10px;
-                        padding: 10px;
-                        max-height: 20px;
-                        Text {
-                            wrap: TextWrap.no-wrap;
-                            text: "Jog Controls";
-                            font-size: 20px;
-                            horizontal-alignment: center;
-                        }
-                    }
-
-                    // Grid for Jog Controls
-                    GridBox {
-                        max-height: 200px;
-
-                        Row {
-                            Button { visible: false; text: "Button"; }
-                            Button { text: "Button"; }
-                            Button { visible: false; text: "Button"; }
-                            Button { text: "Button"; col: 4; rowspan: 1; }
-                        }
-
-                        Row {
-                            Button { text: "Button"; }
-                            Button { visible: false; text: "Button"; }
-                            Button { text: "Button"; }
-                        }
-
-                        Row {
-                            Button { visible: false; text: "Button"; }
-                            Button { text: "Button"; }
-                            Button { visible: false; text: "Button"; }
-                            Button { text: "Button"; col: 4; }
-                        }
-                    }
-
-                    // Speed Control Buttons
-                    HorizontalBox {
-                        height: 60px;
-                        Button { text: "Rapid"; }
-                        Button { text: "Normal"; }
-                        Button { text: "Precise"; }
                     }
                 }
-            }
-        }
+        HorizontalLayout {
 
-        // Log Output Area
-        Rectangle { background: darkgrey; min-width: 20px; min-height: 105px;
-            Text {
-                vertical-alignment: TextVerticalAlignment.top;
-                horizontal-alignment: TextHorizontalAlignment.left;
-                text: log_output;
-            }
+            Rectangle {background: lightsalmon; LogView {}}
         }
     }
 }

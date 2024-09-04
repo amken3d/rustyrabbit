@@ -1,0 +1,38 @@
+
+import { TabWidget} from "std-widgets.slint";
+import { CalibrationViewPort } from "../ui/calibration.slint";
+import { ControlViewPort } from "../ui/control.slint";
+
+
+export component TabArea {
+
+            TabWidget{
+
+
+                Tab {
+                     title: "Control";
+                     Rectangle { background: orange; ControlViewPort {}}
+                }
+                Tab {
+                     title: "Calibration";
+                     Rectangle { background: pink; CalibrationViewPort {}}
+                }
+                Tab {
+                     title: "Settings";
+                     Rectangle { background: orange; }
+                }
+                Tab {
+                     title: "Components";
+                     Rectangle { background: pink; }
+                }
+                Tab {
+                     title: "Jobs";
+                     Rectangle { background: pink; }
+                }
+                Tab {
+                     title: "Help";
+                     Rectangle { background: pink; }
+                }
+            }
+
+}

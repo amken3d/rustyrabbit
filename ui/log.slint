@@ -1,0 +1,16 @@
+
+import { Button, HorizontalBox, VerticalBox, GridBox, TabWidget, ComboBox  } from "std-widgets.slint";
+
+
+export component LogView {
+    property<int> counter: 0;
+    property<string> log_output: "";
+
+Rectangle { background: darkgrey; min-width: 20px; min-height: 105px;
+            Text {
+                vertical-alignment: TextVerticalAlignment.top;
+                horizontal-alignment: TextHorizontalAlignment.left;
+                text: log_output;
+            }
+        }
+}

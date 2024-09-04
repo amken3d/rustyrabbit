@@ -1,11 +1,6 @@
 import { Button,   VerticalBox, HorizontalBox, SpinBox, ComboBox } from "std-widgets.slint";
 
-export component CalibrationPopup {
-    width: 300px;
-    height: 400px;
-
-
-
+export component CalibrationViewPort {
     in-out property<string> selected_calibration: "Chessboard";
     in-out property<int> grid_rows: 6;
     in-out property<int> grid_cols: 9;
@@ -26,12 +21,7 @@ export component CalibrationPopup {
                 }
 
         Rectangle {
-//            height: 200px;
-//            width: 100%;
-            border-width: 1px;
-            border-color: gray;
-            border-radius: 5px;
-            padding: 10px;
+          padding: 10px;
 
             VerticalLayout {
                 spacing: 10px;

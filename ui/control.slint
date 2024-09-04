@@ -1,0 +1,112 @@
+
+
+import { Button,   VerticalBox, HorizontalBox, SpinBox, ComboBox, GridBox } from "std-widgets.slint";
+
+export global Callbacks{
+    callback x_button_click();
+    callback y_button_click();
+    callback z_button_click();
+}
+export component ControlViewPort {
+
+
+            Rectangle { padding: 5px; min-width: 20px;
+                VerticalLayout {
+//                    alignment: LayoutAlignment.stretch;
+                    padding: 10px;
+
+                    // Header for Axes Position
+                    HorizontalBox {
+                        max-height: 20px;
+                        spacing: 0px;
+                        padding: 0px;
+                        Text {
+                            text: "Head Position";
+                            font-size: 20px;
+                            horizontal-alignment: center;
+                        }
+                    }
+
+                    // Grid for Axes Controls
+                    GridBox {
+                        padding: 15px;
+                        spacing: 15px;
+                        //max-height: 140px;
+
+                        Row {   // Header
+                            Text { text: "Axis"; horizontal-alignment: center; }
+                            Text { text: "Machine Position"; horizontal-alignment: center; }
+                            Text { text: "Work Position"; horizontal-alignment: center; }
+                            Text { text: "Action"; horizontal-alignment: center; }
+                        }
+
+                        Row {  // X Axis Row
+                            Text { text: "X"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Button { height: 40px; width: 40px; text: "X"; clicked => { Callbacks.x_button_click(); } }
+                        }
+
+                        Row {  // Y Axis Row
+                            Text { text: "Y"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Button { height: 40px; width: 40px; text: "Y"; clicked => { Callbacks.y_button_click(); } }
+                        }
+
+                        Row {  // Z Axis Row
+                            Text { text: "Z"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Text { text: "0.000 mm"; horizontal-alignment: center; vertical-alignment: center; }
+                            Button { height: 40px; width: 40px; text: "Z"; clicked => { Callbacks.z_button_click(); } }
+                        }
+                    }
+
+                    // Jog Controls Header
+                    HorizontalBox {
+                        spacing: 10px;
+                        padding: 10px;
+                        max-height: 20px;
+                        Text {
+                            wrap: TextWrap.no-wrap;
+                            text: "Jog Controls";
+                            font-size: 20px;
+                            horizontal-alignment: center;
+                        }
+                    }
+
+                    // Grid for Jog Controls
+                    GridBox {
+                        max-height: 200px;
+
+                        Row {
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; }
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; col: 4; rowspan: 1; }
+                        }
+
+                        Row {
+                            Button { text: "Button"; }
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; }
+                        }
+
+                        Row {
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; }
+                            Button { visible: false; text: "Button"; }
+                            Button { text: "Button"; col: 4; }
+                        }
+                    }
+
+                    // Speed Control Buttons
+                    HorizontalBox {
+                        height: 60px;
+                        Button { text: "Rapid"; }
+                        Button { text: "Normal"; }
+                        Button { text: "Precise"; }
+                    }
+                }
+            }
+        }

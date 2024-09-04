@@ -87,37 +87,7 @@ fn main() -> Result<()> {
         Image::default()
     }));
 
-    // Implementing UI Callbacks
-    window.on_home_click(|| {
-        println!("Home button clicked");
-        // Additional functionality for Home button
-    });
 
-    window.on_settings_click(|| {
-        println!("Settings button clicked");
-        // Additional functionality for Settings button
-    });
-
-    window.on_help_click(|| {
-        println!("Help button clicked");
-        // Additional functionality for Help button
-    });
-
-    // Implement Jog Control Button Callbacks
-    window.on_x_button_click(|| {
-        println!("X Button clicked");
-        // Code to handle X button click
-    });
-
-    window.on_y_button_click(|| {
-        println!("Y Button clicked");
-        // Code to handle Y button click
-    });
-
-    window.on_z_button_click(|| {
-        println!("Z Button clicked");
-        // Code to handle Z button click
-    });
 
     window.run()?;
 
