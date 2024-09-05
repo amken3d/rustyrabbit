@@ -1,11 +1,21 @@
-import { Button,   VerticalBox, HorizontalBox, SpinBox, ComboBox } from "std-widgets.slint";
+import { Button, VerticalBox, HorizontalBox, SpinBox, ComboBox, LineEdit } from "std-widgets.slint";
 
-export component CalibrationViewPort {
-    in-out property<string> selected_calibration: "Chessboard";
-    in-out property<int> grid_rows: 6;
-    in-out property<int> grid_cols: 9;
-    in-out property<int> loc_x: 0;
-    in-out property<int> loc_y: 0;
+export global Callbacks {
+    callback calib_click(int,int, int, string, string);
+}
+
+
+
+    export component CalibrationViewPort {
+    in-out property<int> selected_calibration <=> r.current-index; // Use int to represent calibration type
+    in-out property<int> grid_rows <=> s1.value;  // Accessible globally
+    in-out property<int> grid_cols <=> s2.value; // Accessible globally
+    in-out property<string> loc_x <=> s3.text;  // Accessible globally
+    in-out property<string> loc_y <=> s4.text;  // Accessible globally
+    callback calib_click(int,int, int, string, string);
+
+
+
 
 
     VerticalLayout {
@@ -14,45 +24,40 @@ export component CalibrationViewPort {
 
         Text { text: "Select Calibration Type:"; font-size: 18px; }
 
-        ComboBox {  padding-left: 5px;
-                    width: self.preferred-width * 2;  height: self.preferred-height *2 ;
-                    model: ["Chess Board", "Circle Grid", "Rabbit P&P Aruco"];
-                    current-value: "Chess Board";
-                }
+        r := ComboBox {
+            padding-left: 5px;
+            width: self.preferred-width * 2;
+            height: self.preferred-height * 2;
+            model: ["Chess Board", "Circle Grid", "Rabbit P&P Aruco"];
+            current-index: 0;
+        }
 
         Rectangle {
-          padding: 10px;
-
-            VerticalLayout {
+            padding: 10px;
+         VerticalLayout {
                 spacing: 10px;
 
 
-                if (selected_calibration == "Chessboard" || selected_calibration == "Circle Grid" ):
-                    HorizontalBox {
-                        Text { vertical-alignment: center;text: "Grid Rows:"; }
-                        SpinBox { width: 150px;value: grid_rows;  }
-                    }
-                    HorizontalBox {
-                        Text { vertical-alignment: center;text: "Grid Columns:"; }
-                        SpinBox { width: 150px;value: grid_cols;  }
-                    }
-                if selected_calibration == "Rabbit PnP Aruco":
-                    HorizontalBox {
-                        Text { vertical-alignment: center;text: "Location X:"; }
-                        SpinBox { width: 150px;value: loc_x;  }
-                    }
-                    HorizontalBox {
-                        Text { vertical-alignment: center; text: "Grid Columns:"; }
-                        SpinBox { width: 150px;value: loc_y;  }
-                    }
-
+                // Control visibility of components based on conditions
+//                if (r.current-index == 0 || r.current-index == 1) :
+                Text { vertical-alignment: center; text: "Number of Rows"; }
+                s1 := SpinBox { in-out property<int> grid_rows; width: 150px; value: grid_rows; }
+//                if (r.current-index == 0 || r.current-index == 1) :
+                Text { vertical-alignment: center; text: "Number of Columns"; }
+                s2 := SpinBox { in-out property<int> grid_cols; width: 150px; value: grid_cols; }
+//                if r.current-index == 2 : s3{loc_x <=> root.loc_x;}
+                Text { vertical-alignment: center; text: "Location X:"; }
+                s3 := LineEdit { in-out property<string> loc_x;font-size: 14px; width: 150px; placeholder-text: "Enter X coordinate"; text: loc_x; }
+//                if r.current-index == 2 : s4{loc_y <=> root.loc_y;}
+                Text { vertical-alignment: center; text: "Location Y:"; }
+                s4 := LineEdit { in-out property<string> loc_y;font-size: 14px; width: 150px; placeholder-text: "Enter X coordinate"; text: loc_y; }
                 }
             }
-
-
         Button {
             text: "Start Calibration";
-            //clicked => { start_calibration(selected_calibration, grid_rows + "x" + grid_cols); }
+            clicked => {
+                calib_click(selected_calibration,grid_rows, grid_cols, loc_x, loc_y);
+            }
         }
     }
 }

@@ -7,11 +7,20 @@ edition = "2021"
 
 [dependencies]
 slint = "1.7.2"
-opencv =  "0.92.2"
+opencv = "0.92.2"
 log = "0.4.22"
 env_logger = "0.11.5"
 anyhow = "1.0.86"
 time = "0.3.36"
+
+[dependencies.cv-convert]
+version = "0.25.0"  # Please look up the recent version on crates.io
+default-features = false
+features = [
+    'image_0-24',
+    'nalgebra_0-32',
+    'ndarray_0-15',
+]
 
 [build-dependencies]
 slint-build = "1.7.2"

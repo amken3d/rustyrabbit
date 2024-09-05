@@ -1,90 +1,99 @@
-import { Button, HorizontalBox, VerticalBox, GridBox, TabWidget, ComboBox  } from "std-widgets.slint";
-//import { TabArea } from "../ui/tab.slint";
-////import { CameraViewport } from "camera.slint";
+import { Button, HorizontalBox, VerticalBox, GridBox, TabWidget, ComboBox } from "std-widgets.slint";
+import { TabArea } from "../ui/tab.slint";
 import { LogView } from "log.slint";
 import { CalibrationViewPort } from "../ui/calibration.slint";
 import { ControlViewPort } from "../ui/control.slint";
 
 
-export component MainWindow inherits Window{
+export component MainWindow inherits Window {
     pure callback render-image(int) -> image;
     in-out property<int> frame;
+    in-out property<string> status;
 
-    width:  1024px;
+    // Add callback for calibration
+   callback calibration_wrapper_callback(int, int, int, string, string);
+
+    width: 1024px;
     height: 768px;
-//    max-width:  2000px;
-//    max-height: 1400px;
     title: "Rabbit Pick & Place V0.1";
 
     VerticalLayout {
-        
         Rectangle {
-            height: parent.height *0.9;
+            height: parent.height * 0.9;
             HorizontalLayout {
                 alignment: stretch;
 
                 VerticalBox {
-                    width: parent.width *0.35;
-                    //TabArea {}
-                    TabWidget{
-                            Tab {
-                                 title: "Control";
-                                 Rectangle { background: orange; ControlViewPort {}}
+                    width: parent.width * 0.35;
+                    TabWidget {
+                        Tab {
+                            title: "Control";
+                            Rectangle { background: orange; ControlViewPort {} }
+                        }
+                        Tab {
+                            title: "Calibration";
+                            Rectangle { background: pink; CalibrationViewPort {
+                              calib_click => {root.calibration_wrapper_callback(self.selected_calibration,self.grid_rows,self.grid_cols,self.loc_x,self.loc_y)}
+                              }
                             }
-                            Tab {
-                                 title: "Calibration";
-                                 Rectangle { background: pink; CalibrationViewPort {}}
-                            }
-//                            Tab {
-//                                 title: "Settings";
-//                                 Rectangle { background: orange; }
-//                            }
-//                            Tab {
-//                                 title: "Components";
-//                                 Rectangle { background: pink; }
-//                            }
-//                            Tab {
-//                                 title: "Jobs";
-//                                 Rectangle { background: pink; }
-//                            }
-//                            Tab {
-//                                 title: "Help";
-//                                 Rectangle { background: pink; }
-//                            }
                         }
                     }
+                }
+                Rectangle {
+                    width: parent.width * 0.65;
                     Rectangle {
-                        width: parent.width *0.65;
-                        //CameraViewport {}
-                            Rectangle { background: lightgrey; min-width: 16px; min-height: 16px;padding: 50px;
-                                VerticalLayout {alignment: end; width: 100%;height: 100%;
-                                    CameraBox := Rectangle { width: 640px;height: 480px;
-                                    Image { padding: 50px;width: 100%; height: 100%; source: render-image(frame);}
+                        background: lightgrey;
+                        min-width: 16px;
+                        min-height: 16px;
+                        padding: 50px;
+                        VerticalLayout {
+                            alignment: end;
+                            width: 100%;
+                            height: 100%;
+                            CameraBox := Rectangle {
+                                width: 640px;
+                                height: 480px;
+                                Image {
+                                    padding: 50px;
+                                    width: 100%;
+                                    height: 100%;
+                                    source: render-image(frame);
+                                }
+                            }
+                            CameraSwitch := Rectangle {
+                                width: 640px;
+                                HorizontalLayout {
+                                    ComboBox {
+                                        padding-left: 5px;
+                                        width: self.preferred-width * 2;
+                                        model: ["Camera 1", "Camera 2", "Camera 3"];
+                                        current-value: "Camera 1";
                                     }
-                                    CameraSwitch := Rectangle { width: 640px;
-                                        HorizontalLayout {
-                                            ComboBox {
-                                                padding-left: 5px;
-                                                width: self.preferred-width * 2;
-                                                //height: self.preferred-height *2 ;
-                                                model: ["Camera 1", "Camera 2", "Camera 3"];
-                                                current-value: "Camera 1";
-                                            }
-                                        Button { visible: false; text: "Calibrate"; }
-                                        Button { visible: false; text: "Calibrate"; }
-                                        btnCalibrate := Button { visible: false;padding: 10px; height: 40px; width: 100px; text: "Calibrate";  }
-                                        Button { visible: false; text: "Calibrate"; }
-                                        btnCamPwr := Button { padding: 10px; height: 40px; width: 100px; text: "Turn On/Off";  }
-                                        }
+                                    Button { visible: false; text: "Calibrate"; }
+                                    Button { visible: false; text: "Calibrate"; }
+                                    btnCalibrate := Button {
+                                        visible: false;
+                                        padding: 10px;
+                                        height: 40px;
+                                        width: 100px;
+                                        text: "Calibrate";
+                                    }
+                                    Button { visible: false; text: "Calibrate"; }
+                                    btnCamPwr := Button {
+                                        padding: 10px;
+                                        height: 40px;
+                                        width: 100px;
+                                        text: "Turn On/Off";
                                     }
                                 }
                             }
                         }
                     }
                 }
+            }
+        }
         HorizontalLayout {
-
-            Rectangle {background: lightsalmon; LogView {}}
+            Rectangle { background: lightsalmon; LogView {} }
         }
     }
 }
