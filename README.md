@@ -1,3 +1,5 @@
+RustyRabbit is an experimental opensource pick and place machine software built entirely using Rust and OpenCV.  
+
 Install Rust by following the [Rust Getting Started Guide](https://www.rust-lang.org/learn/get-started).
 
 
